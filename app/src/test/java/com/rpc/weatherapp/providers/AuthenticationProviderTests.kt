@@ -1,10 +1,6 @@
 package com.rpc.weatherapp.providers
 
-import android.app.Activity
-import android.text.TextUtils
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -28,9 +24,6 @@ import junit.framework.TestCase.assertNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import java.lang.Exception
-import java.util.concurrent.Executor
-import kotlin.math.exp
 
 class AuthenticationProviderTests {
 
@@ -86,7 +79,7 @@ class AuthenticationProviderTests {
     }
 
     @Test
-    fun `Should trigger onSuccess callback when sign in is not successful`() {
+    fun `Should trigger onError callback with InvalidCredentialsException when sign in is not successful`() {
         val expectedException = mockk<FirebaseAuthException> {
             every { errorCode } returns "ERROR_INVALID_CREDENTIAL"
         }
@@ -106,58 +99,85 @@ class AuthenticationProviderTests {
         }
         providerInTest.signInUser("valid@email.com", "P@ssw0rd!", callback)
 
-
         verify { callback.onError(withArg { it is InvalidCredentialsException }) }
     }
 
+    @Test
+    fun `Should trigger onError callback with IllegalStateException when firebase returns a different ERROR CODE`() {
+        val expectedException = mockk<FirebaseAuthException> {
+            every { errorCode } returns "ERROR_DIFFERENT"
+        }
+        val expected = mockk<Task<AuthResult>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns false
+            every { exception } returns expectedException
+        }
+        val successSlot = slot<OnCompleteListener<AuthResult>>()
+        every { auth.signInWithEmailAndPassword(any(), any()).addOnCompleteListener(capture(successSlot)) } answers {
+            successSlot.captured.onComplete(expected)
+            expected
+        }
 
-    private fun generateSuccessTask(expected: AuthResult): Task<AuthResult> {
-        return object: Task<AuthResult>() {
-            override fun isComplete() = true
-            override fun isSuccessful() = true
+        val callback = mockk<SignInCallback> {
+            every { onError(any()) } just runs
+        }
+        providerInTest.signInUser("valid@email.com", "P@ssw0rd!", callback)
 
-            override fun addOnFailureListener(p0: OnFailureListener): Task<AuthResult> {
-                return this
-            }
+        verify { callback.onError(withArg { it !is InvalidCredentialsException && it.message == "Sign in failed due to error code: ERROR_DIFFERENT." }) }
+    }
 
-            override fun addOnFailureListener(
-                p0: Activity,
-                p1: OnFailureListener
-            ): Task<AuthResult> {
-                return this
-            }
+    @Test
+    fun `Should trigger onError callback with IllegalStateException when result returns null exception`() {
+        val expectedException = IllegalStateException("Failed to sign in due to unknown error.")
+        val expected = mockk<Task<AuthResult>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns false
+            every { exception } returns null
+        }
+        val successSlot = slot<OnCompleteListener<AuthResult>>()
+        every { auth.signInWithEmailAndPassword(any(), any()).addOnCompleteListener(capture(successSlot)) } answers {
+            successSlot.captured.onComplete(expected)
+            expected
+        }
 
-            override fun addOnFailureListener(
-                p0: Executor,
-                p1: OnFailureListener
-            ): Task<AuthResult> {
-                return this
-            }
+        val callback = mockk<SignInCallback> {
+            every { onError(any()) } just runs
+        }
+        providerInTest.signInUser("valid@email.com", "P@ssw0rd!", callback)
 
-            override fun getException(): Exception? = null
+        verify { callback.onError(
+            withArg {
+                it !is InvalidCredentialsException &&
+                it.message == expectedException.message
+            })
+        }
+    }
 
-            override fun getResult(): AuthResult = expected
+    @Test
+    fun `Should trigger onError callback with Any exception when result returns null exception`() {
+        val expectedException = IllegalStateException("Failed to sign in due to unknown error.")
+        val expected = mockk<Task<AuthResult>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns false
+            every { exception } returns expectedException
+        }
 
-            override fun <X : Throwable?> getResult(p0: Class<X>): AuthResult = expected
+        val successSlot = slot<OnCompleteListener<AuthResult>>()
+        every { auth.signInWithEmailAndPassword(any(), any()).addOnCompleteListener(capture(successSlot)) } answers {
+            successSlot.captured.onComplete(expected)
+            expected
+        }
 
-            override fun addOnSuccessListener(
-                p0: Executor,
-                p1: OnSuccessListener<in AuthResult>
-            ): Task<AuthResult> = this
+        val callback = mockk<SignInCallback> {
+            every { onError(any()) } just runs
+        }
+        providerInTest.signInUser("valid@email.com", "P@ssw0rd!", callback)
 
-            override fun addOnSuccessListener(
-                p0: Activity,
-                p1: OnSuccessListener<in AuthResult>
-            ): Task<AuthResult> = this
-
-            override fun addOnSuccessListener(p0: OnSuccessListener<in AuthResult>) = this
-
-            override fun isCanceled() = false
-            override fun addOnCompleteListener(callbcks: OnCompleteListener<AuthResult>): Task<AuthResult> {
-                callbcks.onComplete(this)
-                return this
-            }
-
+        verify { callback.onError(
+            withArg {
+                it !is InvalidCredentialsException &&
+                        it.message == expectedException.message
+            })
         }
     }
 
