@@ -2,7 +2,6 @@ package com.rpc.weatherapp.splash
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rpc.weatherapp.core.auth.UserDataSource
 import com.rpc.weatherapp.core.base.BaseViewModel
@@ -22,6 +21,9 @@ class SplashViewModel(private val userDataSource: UserDataSource, private val di
     }
 
     override fun getState(): StateFlow<SplashState> = state
+    override fun updateState(newState: SplashState) {
+        this.state.value = newState
+    }
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
@@ -30,9 +32,9 @@ class SplashViewModel(private val userDataSource: UserDataSource, private val di
 
     private fun hasLoggedInUser() {
         viewModelScope.launch(dispatcherProvider.io()) {
-            state.value = when(userDataSource.hasLoggedInUser()) {
-                true -> SplashState.Authenticated
-                false -> SplashState.Unauthorized
+            when(userDataSource.hasLoggedInUser()) {
+                true -> updateState(SplashState.Authenticated)
+                false -> updateState(SplashState.Unauthorized)
             }
         }
     }

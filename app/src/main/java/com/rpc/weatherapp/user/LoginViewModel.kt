@@ -52,7 +52,7 @@ class LoginViewModel(private val userDataSource: UserDataSource, private val dis
         }
     }
 
-    private fun updateState(newState: LoginState) {
+    override fun updateState(newState: LoginState) {
         this.state.value = newState
     }
 }

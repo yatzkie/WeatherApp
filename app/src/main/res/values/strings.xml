@@ -5,6 +5,9 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="hint_email">EMAIL</string>
     <string name="hint_password">PASSWORD</string>
+    <string name="hint_display_name">Display Name</string>
     <string name="button_signin">sign in</string>
+    <string name="button_signup">sign up</string>
     <string name="button_sign_up">Sign up instead?</string>
+    <string name="button_sign_in">Sign in instead?</string>
 </resources>

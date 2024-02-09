@@ -14,4 +14,9 @@ object InputValidator {
         return pattern.matcher(password).matches()
     }
 
+    fun validateName(name: String): Boolean {
+        val pattern = Pattern.compile("^(?=.{1,40}$)[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$")
+        return pattern.matcher(name).matches()
+    }
+
 }

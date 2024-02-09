@@ -10,6 +10,7 @@ import com.rpc.weatherapp.core.providers.DispatcherProvider
 import com.rpc.weatherapp.core.providers.DispatcherProviderImpl
 import com.rpc.weatherapp.splash.SplashViewModel
 import com.rpc.weatherapp.user.LoginViewModel
+import com.rpc.weatherapp.user.SignUpViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
@@ -24,4 +25,5 @@ val coreModules = module {
 val viewModelModules = module {
     viewModelOf(::SplashViewModel)
     viewModelOf(::LoginViewModel)
+    viewModelOf(::SignUpViewModel)
 }
