@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/splash">
+
+    <activity
+        android:id="@+id/splash"
+        android:name="com.rpc.weatherapp.splash.SplashActivity"
+        android:label="@string/title_splash"
+        tools:layout="@layout/activity_splash" />
+    <fragment
+        android:id="@+id/navigation_current"
+        android:name="com.rpc.weatherapp.weather.current.CurrentWeatherFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_current_weather" />
+
+    <fragment
+        android:id="@+id/navigation_history"
+        android:name="com.rpc.weatherapp.weather.history.WeatherHistoryFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_weather_history" />
+
+</navigation>
