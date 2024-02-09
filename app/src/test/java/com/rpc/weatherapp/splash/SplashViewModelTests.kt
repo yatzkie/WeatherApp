@@ -20,8 +20,6 @@ import org.junit.Test
 
 class SplashViewModelTests {
 
-    private lateinit var vmInTest: SplashViewModel
-
     @JvmField
     @ExperimentalCoroutinesApi
     @Rule
@@ -30,6 +28,9 @@ class SplashViewModelTests {
     @MockK
     private lateinit var userDataSource: UserDataSource
 
+    private lateinit var vmInTest: SplashViewModel
+
+    @ExperimentalCoroutinesApi
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -42,34 +43,32 @@ class SplashViewModelTests {
 
     @Test
     fun `Should return unauthorized state when there is no logged in user`() {
-        val initialValue = vmInTest.getStates().value
+        val initialValue = vmInTest.getState().value
         assertTrue(initialValue is SplashState.Loading)
 
         coEvery { userDataSource.hasLoggedInUser() } returns false
 
         vmInTest.sendEvent(SplashEvent.FetchLoggedInUser)
 
-        val currentValue = vmInTest.getStates().value
+        val currentValue = vmInTest.getState().value
         assertTrue(currentValue is SplashState.Unauthorized)
 
         coVerify { userDataSource.hasLoggedInUser() }
-
     }
 
     @Test
     fun `Should return unauthorized state when there is a logged in user`() {
-        val initialValue = vmInTest.getStates().value
+        val initialValue = vmInTest.getState().value
         assertTrue(initialValue is SplashState.Loading)
 
         coEvery { userDataSource.hasLoggedInUser() } returns true
 
         vmInTest.sendEvent(SplashEvent.FetchLoggedInUser)
 
-        val currentValue = vmInTest.getStates().value
+        val currentValue = vmInTest.getState().value
         assertTrue(currentValue is SplashState.Authenticated)
 
         coVerify { userDataSource.hasLoggedInUser() }
-
     }
 
     @After

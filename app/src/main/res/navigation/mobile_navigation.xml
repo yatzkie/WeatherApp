@@ -3,13 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/splash">
+    app:startDestination="@+id/navigation_current">
 
-    <activity
-        android:id="@+id/splash"
-        android:name="com.rpc.weatherapp.splash.SplashActivity"
-        android:label="@string/title_splash"
-        tools:layout="@layout/activity_splash" />
     <fragment
         android:id="@+id/navigation_current"
         android:name="com.rpc.weatherapp.weather.current.CurrentWeatherFragment"

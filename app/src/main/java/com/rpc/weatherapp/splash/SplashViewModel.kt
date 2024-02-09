@@ -5,20 +5,24 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rpc.weatherapp.core.auth.UserDataSource
+import com.rpc.weatherapp.core.base.BaseViewModel
 import com.rpc.weatherapp.core.providers.DispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class SplashViewModel(private val userDataSource: UserDataSource, private val dispatcherProvider: DispatcherProvider): ViewModel(), DefaultLifecycleObserver {
+class SplashViewModel(private val userDataSource: UserDataSource, private val dispatcherProvider: DispatcherProvider): BaseViewModel<SplashState, SplashEvent>(), DefaultLifecycleObserver {
 
     private val state = MutableStateFlow<SplashState>(SplashState.Loading)
 
-    fun sendEvent(event: SplashEvent) {
+    override fun sendEvent(event: SplashEvent) {
         when(event) {
             SplashEvent.FetchLoggedInUser -> hasLoggedInUser()
         }
     }
+
+    override fun getState(): StateFlow<SplashState> = state
+
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
         sendEvent(SplashEvent.FetchLoggedInUser)
@@ -33,7 +37,6 @@ class SplashViewModel(private val userDataSource: UserDataSource, private val di
         }
     }
 
-    fun getStates(): StateFlow<SplashState> = state
 }
 
 sealed class SplashState {

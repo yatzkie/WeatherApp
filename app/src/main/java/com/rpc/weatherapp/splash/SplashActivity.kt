@@ -24,9 +24,7 @@ class SplashActivity: AppCompatActivity() {
         setContentView(binding?.root)
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getStates().collect { state ->
-                    handleState(state)
-                }
+                viewModel.getState().collect { state -> handleState(state) }
             }
         }
         lifecycle.addObserver(viewModel)
