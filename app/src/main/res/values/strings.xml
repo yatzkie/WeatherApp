@@ -1,8 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">WeatherApp</string>
     <string name="title_splash">Splash</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_display_name">Display Name</string>
@@ -10,4 +8,5 @@
     <string name="button_signup">sign up</string>
     <string name="button_sign_up">Sign up instead?</string>
     <string name="button_sign_in">Sign in instead?</string>
+    <string name="button_sign_out">Sign Out</string>
 </resources>

@@ -19,7 +19,7 @@ class LoginActivity: AppCompatActivity() {
     private var binding: ActivityLoginBinding? = null
     private val viewModel: LoginViewModel by inject()
     private val signUpContract = registerForActivityResult(SignUpContract()) { signUpSuccessful ->
-        if (signUpSuccessful) showMessage("Sign Up successful. Please sign in to continue.")
+        if (signUpSuccessful) goToMain()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +49,6 @@ class LoginActivity: AppCompatActivity() {
 
         bind.signUpLink.setOnClickListener {
             viewModel.sendEvent(LoginEvent.SignUp)
-            goToSignUp()
         }
     }
 

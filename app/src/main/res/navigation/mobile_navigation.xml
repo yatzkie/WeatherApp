@@ -8,13 +8,11 @@
     <fragment
         android:id="@+id/navigation_current"
         android:name="com.rpc.weatherapp.weather.current.CurrentWeatherFragment"
-        android:label="@string/title_home"
         tools:layout="@layout/fragment_current_weather" />
 
     <fragment
         android:id="@+id/navigation_history"
         android:name="com.rpc.weatherapp.weather.history.WeatherHistoryFragment"
-        android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_weather_history" />
 
 </navigation>

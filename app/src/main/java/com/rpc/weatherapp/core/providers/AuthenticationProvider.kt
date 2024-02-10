@@ -9,9 +9,9 @@ import com.google.firebase.auth.UserProfileChangeRequest
 
 interface AuthenticationProvider {
     fun getUser(): FirebaseUser?
-
     fun signInUser(email: String, password: String, signInCallback: SignInCallback)
     fun signUpUser(displayName: String, email: String, password: String, signUpCallback: SignUpCallback)
+    fun signOutUser()
 }
 
 class AuthenticationProviderImpl(private val auth: FirebaseAuth): AuthenticationProvider {
@@ -82,6 +82,10 @@ class AuthenticationProviderImpl(private val auth: FirebaseAuth): Authentication
                     signUpCallback.onError(IllegalStateException("Sign in failed due to error code: ${exception.errorCode}."))
                 }
             }
+    }
+
+    override fun signOutUser() {
+        auth.signOut()
     }
 }
 

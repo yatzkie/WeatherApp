@@ -64,7 +64,6 @@ class SignUpActivity: AppCompatActivity() {
             SignUpState.Loading -> showLoading()
             SignUpState.SignIn -> gotoSignIn()
             SignUpState.SignUpSuccessful -> {
-                showMessage("Congratulations! You have successfully signed up.")
                 gotoSignIn(signUpSuccessful = true)
             }
         }

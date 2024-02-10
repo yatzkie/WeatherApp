@@ -4,19 +4,161 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".weather.current.HomeFragment">
+    tools:context=".weather.current.CurrentWeatherFragment"
+    android:background="@drawable/main_background">
 
     <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
+        android:id="@+id/sign_out_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/button_sign_out"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="@dimen/margin_large"
+        app:drawableEndCompat="@drawable/ic_sign_out" />
+
+    <TextView
+        android:id="@+id/welcome_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="@id/sign_out_button"
+        app:layout_constraintBottom_toBottomOf="@id/sign_out_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingStart="@dimen/padding_large" />
+
+    <ImageView
+        android:id="@+id/weather_icon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/app_icon_white"
+        android:adjustViewBounds="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/weather_details"
+        android:layout_margin="@dimen/margin_medium"
+        android:visibility="gone" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/weather_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/rounded_information"
+        android:padding="@dimen/padding_large"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/weather_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The weather today is"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60"
+            android:textColor="@color/white_70"
+            android:textAllCaps="true"
+            android:textSize="60sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/weather_header"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/margin_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="\u2103"
+            android:textStyle="bold"
+            android:textColor="@color/white_70"
+            app:layout_constraintStart_toEndOf="@id/temperature"
+            app:layout_constraintTop_toTopOf="@id/temperature"
+            app:layout_constraintBottom_toBottomOf="@id/temperature"/>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thunderstorm"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/temperature"
+            app:layout_constraintStart_toStartOf="@id/temperature"
+            app:layout_constraintEnd_toEndOf="@id/temperature"
+            app:layout_constraintBottom_toBottomOf="@id/temperature"
+            android:layout_margin="@dimen/margin_small"
+            android:paddingTop="@dimen/padding_small"
+            />
+
+        <TextView
+            android:id="@+id/city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="City Name"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/description"
+            app:layout_constraintStart_toStartOf="@id/description"
+            app:layout_constraintEnd_toEndOf="@id/description"
+            android:layout_margin="@dimen/margin_small"
+            android:paddingTop="@dimen/padding_small"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="@dimen/splash_indicator_size"
+        android:layout_height="@dimen/splash_indicator_size"
+        android:indeterminate="true"
+        app:layout_constraintTop_toBottomOf="@id/weather_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="@dimen/splash_indicator_padding"
+        android:visibility="gone"
+        />
+
+    <TextView
+        style="@style/Theme.WeatherApp.Banner"
+        android:id="@+id/notification_banner"
+        android:text=""
+        android:background="@drawable/rounded_error_notification"
+        app:layout_constraintTop_toBottomOf="@id/weather_details"
+        app:layout_constraintStart_toStartOf="@id/weather_details"
+        app:layout_constraintEnd_toEndOf="@id/weather_details"
+        android:gravity="center"
+        android:maxLines="3"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/banner_hint"
+        android:layout_width="@dimen/icon_small"
+        android:layout_height="@dimen/icon_small"
+        android:src="@drawable/ic_notification"
+        app:layout_constraintTop_toBottomOf="@id/notification_banner"
+        app:layout_constraintBottom_toTopOf="@id/notification_banner"
+        app:layout_constraintEnd_toEndOf="@id/notification_banner"
+        app:layout_constraintStart_toEndOf="@id/notification_banner"
+        android:layout_margin="@dimen/padding_small"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

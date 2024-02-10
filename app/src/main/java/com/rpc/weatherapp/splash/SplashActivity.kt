@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.rpc.weatherapp.databinding.ActivitySplashBinding
 import com.rpc.weatherapp.user.LoginActivity
+import com.rpc.weatherapp.weather.MainActivity
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.observeOn
 import kotlinx.coroutines.launch
@@ -33,7 +34,10 @@ class SplashActivity: AppCompatActivity() {
     private fun handleState(state: SplashState) {
         when(state) {
             SplashState.Loading -> binding?.loadingIndicator?.isVisible = true
-            SplashState.Authenticated -> {}
+            SplashState.Authenticated -> {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
             SplashState.Unauthorized -> {
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()

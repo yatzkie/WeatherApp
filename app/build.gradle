@@ -5,12 +5,16 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def properties = new Properties()
+rootProject.file("build.properties").withInputStream { properties.load(it) }
+
 android {
     namespace 'com.rpc.weatherapp'
     compileSdk 34
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     packagingOptions {
@@ -19,12 +23,16 @@ android {
 
     defaultConfig {
         applicationId "com.rpc.weatherapp"
-        minSdk 30
+        minSdk 31
         targetSdk 34
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"https://api.openweathermap.org\"")
+        buildConfigField("String", "RESOURCE_URL", "\"https://openweathermap.org\"")
+        buildConfigField("String", "API_KEY", properties.getProperty("api_key") ?: "null")
     }
 
     buildTypes {
@@ -58,6 +66,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
 
     implementation "io.insert-koin:koin-core:3.5.3"
     implementation "io.insert-koin:koin-core-coroutines:3.5.3"
@@ -69,6 +78,11 @@ dependencies {
 
     implementation "androidx.room:room-runtime:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
+
+    implementation 'com.google.android.gms:play-services-location:21.1.0'
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+
+    kapt 'com.github.bumptech.glide:compiler:4.14.2'
 
     testImplementation "io.mockk:mockk:1.13.9"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"

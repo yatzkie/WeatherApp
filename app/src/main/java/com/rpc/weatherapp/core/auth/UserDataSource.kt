@@ -16,12 +16,12 @@ interface UserDataSource {
     suspend fun getLoggedInUser(): User
     suspend fun loginUser(email: String, password: String)
     suspend fun signUpUser(displayName: String, email: String, password: String)
+    fun signOutUser()
 }
 
 class UserDataSourceImpl(private val authProvider: AuthenticationProvider): UserDataSource {
 
     override suspend fun hasLoggedInUser(): Boolean {
-        delay(1000)
         return authProvider.getUser() != null
     }
     override suspend fun getLoggedInUser(): User {
@@ -57,6 +57,10 @@ class UserDataSourceImpl(private val authProvider: AuthenticationProvider): User
 
             })
         }
+    }
+
+    override fun signOutUser() {
+        authProvider.signOutUser()
     }
 
 }
