@@ -1,4 +1,4 @@
-package com.rpc.weatherapp.core.auth
+package com.rpc.weatherapp.core.sources
 
 import android.location.Location
 import android.os.CancellationSignal
@@ -6,7 +6,6 @@ import com.rpc.weatherapp.core.providers.LocationProvider
 import com.rpc.weatherapp.core.providers.LocationRequestCallback
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch

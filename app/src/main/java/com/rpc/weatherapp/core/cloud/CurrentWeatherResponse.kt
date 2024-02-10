@@ -1,7 +1,8 @@
-package com.rpc.weatherapp.core.domain
+package com.rpc.weatherapp.core.cloud
 
 import com.google.gson.annotations.SerializedName
 import com.rpc.weatherapp.BuildConfig
+import com.rpc.weatherapp.core.domain.WeatherData
 
 data class CurrentWeatherResponse(
     @SerializedName("weather") val weather: List<Weather>,

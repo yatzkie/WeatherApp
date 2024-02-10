@@ -1,6 +1,6 @@
 package com.rpc.weatherapp.user
 
-import com.rpc.weatherapp.core.auth.UserDataSource
+import com.rpc.weatherapp.core.sources.UserDataSource
 import com.rpc.weatherapp.core.providers.DispatcherProvider
 import com.rpc.weatherapp.core.providers.InvalidCredentialsException
 import com.rpc.weatherapp.rules.MainCoroutineRule

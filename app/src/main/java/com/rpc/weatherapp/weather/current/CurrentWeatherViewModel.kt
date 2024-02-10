@@ -1,9 +1,9 @@
 package com.rpc.weatherapp.weather.current
 
 import androidx.lifecycle.viewModelScope
-import com.rpc.weatherapp.core.auth.LocationDataSource
-import com.rpc.weatherapp.core.auth.UserDataSource
-import com.rpc.weatherapp.core.auth.WeatherDataSource
+import com.rpc.weatherapp.core.sources.LocationDataSource
+import com.rpc.weatherapp.core.sources.UserDataSource
+import com.rpc.weatherapp.core.sources.WeatherDataSource
 import com.rpc.weatherapp.core.base.BaseViewModel
 import com.rpc.weatherapp.core.domain.User
 import com.rpc.weatherapp.core.domain.WeatherData
@@ -28,6 +28,7 @@ class CurrentWeatherViewModel(
 
     private val state = MutableStateFlow<CurrentWeatherState>(CurrentWeatherState.Idle)
     private var currentUser: User? = null
+
     override fun sendEvent(event: CurrentWeatherEvent) {
         when(event) {
             CurrentWeatherEvent.FetchCurrentUser -> fetchCurrentUser()

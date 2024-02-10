@@ -3,7 +3,7 @@ package com.rpc.weatherapp.splash
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import com.rpc.weatherapp.core.auth.UserDataSource
+import com.rpc.weatherapp.core.sources.UserDataSource
 import com.rpc.weatherapp.core.base.BaseViewModel
 import com.rpc.weatherapp.core.providers.DispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow

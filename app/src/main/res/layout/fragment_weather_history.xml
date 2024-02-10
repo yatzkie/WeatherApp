@@ -4,19 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".weather.history.DashboardFragment">
+    tools:context=".weather.history.WeatherHistoryFragment">
 
-    <TextView
-        android:id="@+id/text_dashboard"
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/list_weather_history"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/footer"
+        android:layout_margin="@dimen/margin_large" />
+
+    <View
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+    <TextView
+        style="@style/Theme.WeatherApp.Banner"
+        android:id="@+id/notification_banner"
+        android:text=""
+        android:background="@drawable/rounded_error_notification"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:maxLines="3"
+        android:visibility="gone" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="@dimen/splash_indicator_size"
+        android:layout_height="@dimen/splash_indicator_size"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:paddingTop="@dimen/splash_indicator_padding"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/banner_hint"
+        android:layout_width="@dimen/icon_small"
+        android:layout_height="@dimen/icon_small"
+        android:src="@drawable/ic_notification"
+        app:layout_constraintTop_toBottomOf="@id/notification_banner"
+        app:layout_constraintBottom_toTopOf="@id/notification_banner"
+        app:layout_constraintEnd_toEndOf="@id/notification_banner"
+        app:layout_constraintStart_toEndOf="@id/notification_banner"
+        android:layout_margin="@dimen/padding_small"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

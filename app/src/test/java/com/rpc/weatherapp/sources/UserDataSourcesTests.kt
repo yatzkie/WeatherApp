@@ -1,8 +1,7 @@
 package com.rpc.weatherapp.sources
 
-import com.rpc.weatherapp.core.auth.UserDataSource
-import com.rpc.weatherapp.core.auth.UserDataSourceImpl
-import com.rpc.weatherapp.core.domain.User
+import com.rpc.weatherapp.core.sources.UserDataSource
+import com.rpc.weatherapp.core.sources.UserDataSourceImpl
 import com.rpc.weatherapp.core.providers.AuthenticationProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".weather.current.CurrentWeatherFragment"
-    android:background="@drawable/main_background">
+    tools:context=".weather.current.CurrentWeatherFragment">
 
     <TextView
         android:id="@+id/sign_out_button"

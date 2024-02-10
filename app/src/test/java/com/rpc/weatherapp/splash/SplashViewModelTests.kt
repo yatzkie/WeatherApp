@@ -1,6 +1,6 @@
 package com.rpc.weatherapp.splash
 
-import com.rpc.weatherapp.core.auth.UserDataSource
+import com.rpc.weatherapp.core.sources.UserDataSource
 import com.rpc.weatherapp.core.providers.DispatcherProvider
 import com.rpc.weatherapp.rules.MainCoroutineRule
 import io.mockk.MockKAnnotations

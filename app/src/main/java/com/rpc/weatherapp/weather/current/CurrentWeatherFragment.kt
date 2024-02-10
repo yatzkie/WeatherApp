@@ -47,8 +47,6 @@ class CurrentWeatherFragment : Fragment() {
         }
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -111,7 +109,7 @@ class CurrentWeatherFragment : Fragment() {
                 binding.welcomeBanner.text = "Welcome, ${state.displayName}!"
                 checkPermissions()
             }
-            CurrentWeatherState.UnauthorizedUser,
+            CurrentWeatherState.UnauthorizedUser -> showForcedSignOutPrompt()
             CurrentWeatherState.SignOut -> goToSplash()
         }
     }
@@ -166,19 +164,25 @@ class CurrentWeatherFragment : Fragment() {
     }
 
     private fun showLocationPermissionRationale() {
-        showPrompt(
-            title = "Requesting location permission",
-            message = "In order to use this feature you have to allow location permission")
-    }
-    private fun showPrompt(title: String, message: String) {
         val context = this.context ?: return
         val builder = AlertDialog.Builder(context)
-            .setTitle(title)
-            .setMessage(message)
+            .setTitle("Requesting location permission")
+            .setMessage("In order to use this feature you have to allow location permission")
             .setPositiveButton("open settings") { _, _ -> goToSettings() }
             .setNegativeButton("cancel") { _, _ ->  }
         builder.show()
     }
+
+    private fun showForcedSignOutPrompt() {
+        val context = this.context ?: return
+        val builder = AlertDialog.Builder(context)
+            .setTitle("Sign Out")
+            .setMessage("Unable to find existing current session. Forcing sign out.")
+            .setPositiveButton("ok") { _, _ -> }
+            .setOnDismissListener { viewModel.sendEvent(CurrentWeatherEvent.SignOut) }
+        builder.show()
+    }
+
 
     private fun goToSettings() {
         val context = this.context ?: return

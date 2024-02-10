@@ -2,7 +2,7 @@ package com.rpc.weatherapp.core.providers
 
 import com.rpc.weatherapp.BuildConfig
 import com.rpc.weatherapp.core.cloud.WeatherAPI
-import com.rpc.weatherapp.core.domain.CurrentWeatherResponse
+import com.rpc.weatherapp.core.cloud.CurrentWeatherResponse
 
 interface WeatherDataProvider {
     fun getCurrentWeather(lat: Double, lon: Double): CurrentWeatherResponse

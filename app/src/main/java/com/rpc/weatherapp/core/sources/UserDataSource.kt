@@ -1,11 +1,9 @@
-package com.rpc.weatherapp.core.auth
+package com.rpc.weatherapp.core.sources
 
 import com.rpc.weatherapp.core.domain.User
 import com.rpc.weatherapp.core.providers.AuthenticationProvider
 import com.rpc.weatherapp.core.providers.SignInCallback
 import com.rpc.weatherapp.core.providers.SignUpCallback
-import kotlinx.coroutines.delay
-import java.util.UUID
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine

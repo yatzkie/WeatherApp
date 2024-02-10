@@ -77,12 +77,17 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
 
     implementation "androidx.room:room-runtime:2.6.1"
+    implementation "androidx.room:room-ktx:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
 
     implementation 'com.google.android.gms:play-services-location:21.1.0'
     implementation 'com.github.bumptech.glide:glide:4.14.2'
 
     kapt 'com.github.bumptech.glide:compiler:4.14.2'
+
+    implementation "com.airbnb.android:epoxy:5.1.4"
+    // Add the annotation processor if you are using Epoxy's annotations (recommended)
+    kapt "com.airbnb.android:epoxy-processor:5.1.4"
 
     testImplementation "io.mockk:mockk:1.13.9"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3"
