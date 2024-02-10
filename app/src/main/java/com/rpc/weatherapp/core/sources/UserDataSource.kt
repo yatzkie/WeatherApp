@@ -52,7 +52,6 @@ class UserDataSourceImpl(private val authProvider: AuthenticationProvider): User
                 override fun onError(t: Throwable) {
                     continuation.resumeWithException(t)
                 }
-
             })
         }
     }

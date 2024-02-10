@@ -233,6 +233,53 @@ class AuthenticationProviderTests {
         verify { callback.onSuccess() }
     }
 
+    @Test
+    fun `Should trigger onError when sign up is not successful due to unknown error`() {
+        val expectedException = IllegalStateException("Failed to sign in due to unknown error.")
+
+        val currentUser = mockk<FirebaseUser>()
+        val initialTask = mockk<Task<AuthResult>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns false
+            every { isCanceled } returns true
+            every { exception } returns null
+        }
+        val expected = mockk<Task<Void>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns false
+            every { isCanceled } returns true
+            every { exception } returns null
+        }
+        val createUserSlot = slot<Continuation<AuthResult, Task<Void>>>()
+        val successSlot = slot<OnCompleteListener<Void>>()
+        every { auth.createUserWithEmailAndPassword(any(), any())  } returns initialTask
+        every { auth.currentUser } returns currentUser
+        every { initialTask.continueWithTask(capture(createUserSlot)) } answers {
+            createUserSlot.captured.then(initialTask)
+            expected
+        }
+        every { currentUser.updateProfile(any()) } returns expected
+        every { expected.addOnCompleteListener(capture(successSlot)) } answers {
+            successSlot.captured.onComplete(expected)
+            expected
+        }
+
+        val callback = mockk<SignUpCallback> {
+            every { onError(any()) } just runs
+        }
+        providerInTest.signUpUser("Display Name", "valid@email.com", "P@ssw0rd!", callback)
+
+        verify { auth.createUserWithEmailAndPassword("valid@email.com", "P@ssw0rd!") }
+        verify { callback.onError(withArg { assertTrue(it.message == expectedException.message) }) }
+    }
+
+    @Test
+    fun `Should call firebase Auth - signOut()`() {
+        every { auth.signOut() } just runs
+        providerInTest.signOutUser()
+        verify { auth.signOut() }
+    }
+
     @After
     fun tearDown() {
         unmockkAll()

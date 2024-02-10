@@ -10,7 +10,6 @@ import com.rpc.weatherapp.core.domain.WeatherData
 import com.rpc.weatherapp.core.providers.DispatcherProvider
 import com.rpc.weatherapp.core.providers.LocationDisabledException
 import com.rpc.weatherapp.core.providers.NoAvailableProviderException
-import com.rpc.weatherapp.core.providers.NoLocationFoundException
 import com.rpc.weatherapp.core.providers.NoPermissionException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -86,9 +85,6 @@ class CurrentWeatherViewModel(
                         }
                         is NoAvailableProviderException -> {
                             updateState(CurrentWeatherState.Error("No Location Providers available"))
-                        }
-                        is NoLocationFoundException -> {
-                            updateState(CurrentWeatherState.Error("Failed to find location data"))
                         }
                         else -> {
                             updateState(CurrentWeatherState.Error("Failed to fetch location data due to an unknown error."))
