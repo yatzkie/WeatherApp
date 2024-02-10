@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.rpc.weatherapp.R
 import com.rpc.weatherapp.databinding.ActivitySignUpBinding
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -55,14 +56,17 @@ class SignUpActivity: AppCompatActivity() {
 
     private fun handleStates(state: SignUpState) {
         when(state) {
-            is SignUpState.Error -> showError(state.message)
+            is SignUpState.Error -> showMessage(state.message)
             SignUpState.Idle -> resetToIdle()
-            SignUpState.InvalidEmailFormat -> showError("Message")
-            SignUpState.InvalidNameFormat -> showError("Name")
-            SignUpState.InvalidPasswordFormat -> showError("Passowrd")
+            SignUpState.InvalidEmailFormat -> showMessage("Invalid Email format.")
+            SignUpState.InvalidNameFormat -> showMessage("Invalid name format.")
+            SignUpState.InvalidPasswordFormat -> showMessage("Password should be a minimum of 6 characters with contains a digit, special character (@#\\$%^&+=!), no whitespaces and uppercase, lowercase character.")
             SignUpState.Loading -> showLoading()
             SignUpState.SignIn -> gotoSignIn()
-            SignUpState.SignUpSuccessful -> gotoSignIn(signUpSuccessful = true)
+            SignUpState.SignUpSuccessful -> {
+                showMessage("Congratulations! You have successfully signed up.")
+                gotoSignIn(signUpSuccessful = true)
+            }
         }
     }
 
@@ -78,7 +82,7 @@ class SignUpActivity: AppCompatActivity() {
         binding?.bannerHint?.isVisible = false
     }
 
-    private fun showError(message: String) {
+    private fun showMessage(message: String) {
         binding?.loadingIndicator?.isVisible = false
         binding?.notificationBanner?.isVisible = true
         binding?.notificationBanner?.text = message

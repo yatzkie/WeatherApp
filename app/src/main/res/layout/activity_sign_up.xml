@@ -28,6 +28,7 @@
         style="@style/Theme.WeatherApp.Banner"
         android:id="@+id/notification_banner"
         android:text=""
+        android:background="@drawable/rounded_error_notification"
         app:layout_constraintTop_toBottomOf="@id/app_icon"
         app:layout_constraintStart_toStartOf="@id/form_container"
         app:layout_constraintEnd_toEndOf="@id/form_container"
@@ -127,9 +128,9 @@
             android:id="@+id/sign_in_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_sign_up"
-            app:layout_constraintTop_toBottomOf="@id/sign_in_button"
-            app:layout_constraintStart_toStartOf="@id/sign_in_button" />
+            android:text="@string/button_sign_in"
+            app:layout_constraintTop_toBottomOf="@id/sign_up_button"
+            app:layout_constraintStart_toStartOf="@id/sign_up_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

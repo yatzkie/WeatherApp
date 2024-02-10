@@ -17,12 +17,9 @@ class LoginViewModel(private val userDataSource: UserDataSource, private val dis
     override fun sendEvent(event: LoginEvent) {
         when(event) {
             is LoginEvent.SignIn -> loginUser(event.email, event.password)
-            LoginEvent.SignUp -> showSignUpPage()
+            LoginEvent.SignUp -> updateState(LoginState.SignUp)
+            LoginEvent.AwaitingSignUpResult -> updateState(LoginState.Idle)
         }
-    }
-
-    private fun showSignUpPage() {
-        updateState(LoginState.SignUp)
     }
 
     override fun getState(): StateFlow<LoginState> = state
@@ -73,5 +70,6 @@ sealed class LoginState {
 
 sealed class LoginEvent {
     data class SignIn(val email: String, val password: String): LoginEvent()
+    object AwaitingSignUpResult: LoginEvent()
     object SignUp: LoginEvent()
 }

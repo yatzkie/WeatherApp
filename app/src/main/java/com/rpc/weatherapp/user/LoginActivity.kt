@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.rpc.weatherapp.R
 import com.rpc.weatherapp.databinding.ActivityLoginBinding
 import com.rpc.weatherapp.weather.MainActivity
 import kotlinx.coroutines.launch
@@ -17,7 +18,9 @@ class LoginActivity: AppCompatActivity() {
 
     private var binding: ActivityLoginBinding? = null
     private val viewModel: LoginViewModel by inject()
-
+    private val signUpContract = registerForActivityResult(SignUpContract()) { signUpSuccessful ->
+        if (signUpSuccessful) showMessage("Sign Up successful. Please sign in to continue.")
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,6 +49,7 @@ class LoginActivity: AppCompatActivity() {
 
         bind.signUpLink.setOnClickListener {
             viewModel.sendEvent(LoginEvent.SignUp)
+            goToSignUp()
         }
     }
 
@@ -53,12 +57,13 @@ class LoginActivity: AppCompatActivity() {
         when(state) {
             LoginState.Idle -> resetToIdle()
             LoginState.Loading -> showLoading()
-            is LoginState.Error -> showError(state.message)
+            is LoginState.Error -> showMessage(state.message, isError = true)
             LoginState.SignInSuccessful -> goToMain()
             LoginState.SignUp -> goToSignUp()
-            LoginState.InvalidCredentials -> showError("Incorrect email or password.")
-            LoginState.InvalidEmailFormat -> showError("Email entered is not a valid email.")
-            LoginState.InvalidPasswordFormat -> showError("Password should be a minimum of 6 characters with contains a digit, special character (@#\\$%^&+=!), no whitespaces and uppercase, lowercase character.")
+            LoginState.InvalidCredentials -> showMessage("Incorrect email or password.", isError = true)
+            LoginState.InvalidEmailFormat -> showMessage("Email entered is not a valid email.", isError = true)
+            LoginState.InvalidPasswordFormat ->
+                showMessage("Password should be a minimum of 6 characters with contains a digit, special character (@#\\$%^&+=!), no whitespaces and uppercase, lowercase character.", isError = true)
         }
     }
 
@@ -68,11 +73,16 @@ class LoginActivity: AppCompatActivity() {
         binding?.bannerHint?.isVisible = false
     }
 
-    private fun showError(message: String) {
+    private fun showMessage(message: String, isError: Boolean = false) {
         binding?.notificationBanner?.isVisible = true
         binding?.notificationBanner?.text = message
         binding?.loadingIndicator?.isVisible = false
         binding?.bannerHint?.isVisible = true
+        binding?.notificationBanner?.setBackgroundResource(if (isError) {
+            R.drawable.rounded_error_notification
+        } else {
+            R.drawable.rounded_notification
+        })
     }
 
     private fun showLoading() {
@@ -85,8 +95,8 @@ class LoginActivity: AppCompatActivity() {
     }
 
     private fun goToSignUp() {
-        val intent = Intent(this, SignUpActivity::class.java)
-        startActivity(intent)
+        viewModel.sendEvent(LoginEvent.AwaitingSignUpResult)
+        signUpContract.launch(Unit)
     }
 
 

@@ -109,6 +109,11 @@ class LoginViewModelTests {
 
         val currentState = vmInTest.getState().value
         assertTrue(currentState is LoginState.SignUp)
+
+        vmInTest.sendEvent(LoginEvent.AwaitingSignUpResult)
+
+        val finalState = vmInTest.getState().value
+        assertTrue(finalState is LoginState.Idle)
     }
 
     @After

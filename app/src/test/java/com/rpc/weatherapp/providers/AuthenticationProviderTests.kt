@@ -1,26 +1,33 @@
 package com.rpc.weatherapp.providers
 
+import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.rpc.weatherapp.core.domain.User
 import com.rpc.weatherapp.core.providers.AuthenticationProvider
 import com.rpc.weatherapp.core.providers.AuthenticationProviderImpl
 import com.rpc.weatherapp.core.providers.InvalidCredentialsException
 import com.rpc.weatherapp.core.providers.SignInCallback
+import com.rpc.weatherapp.core.providers.SignUpCallback
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
 import io.mockk.unmockkAll
 import io.mockk.verify
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertNull
+import junit.framework.TestCase.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -44,7 +51,6 @@ class AuthenticationProviderTests {
         val actual = providerInTest.getUser()
 
         assertNull(actual)
-
     }
 
     @Test
@@ -55,7 +61,6 @@ class AuthenticationProviderTests {
         val actual = providerInTest.getUser()
 
         assertNotNull(actual)
-
     }
 
     @Test
@@ -63,6 +68,7 @@ class AuthenticationProviderTests {
         val expected = mockk<Task<AuthResult>> {
             every { isComplete } returns true
             every { isSuccessful } returns true
+            every { isCanceled } returns false
         }
         val successSlot = slot<OnCompleteListener<AuthResult>>()
         every { auth.signInWithEmailAndPassword(any(), any()).addOnCompleteListener(capture(successSlot)) } answers {
@@ -75,6 +81,7 @@ class AuthenticationProviderTests {
         }
         providerInTest.signInUser("valid@email.com", "P@ssw0rd!", callback)
 
+        verify { auth.signInWithEmailAndPassword("valid@email.com", "P@ssw0rd!") }
         verify { callback.onSuccess() }
     }
 
@@ -179,6 +186,51 @@ class AuthenticationProviderTests {
                         it.message == expectedException.message
             })
         }
+    }
+
+    @Test
+    fun `Should trigger onSuccess when sign up is successful`() {
+        mockkConstructor(UserProfileChangeRequest.Builder::class)
+        val request = mockk<UserProfileChangeRequest>()
+        every { anyConstructed<UserProfileChangeRequest.Builder>().setDisplayName(any()) } answers { this.self as UserProfileChangeRequest.Builder }
+        every { anyConstructed<UserProfileChangeRequest.Builder>().build() } returns request
+
+
+        val currentUser = mockk<FirebaseUser>()
+        val initialTask = mockk<Task<AuthResult>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns true
+            every { isCanceled } returns false
+            every { exception } returns null
+        }
+        val expected = mockk<Task<Void>> {
+            every { isComplete } returns true
+            every { isSuccessful } returns true
+            every { isCanceled } returns false
+            every { exception } returns null
+        }
+        val createUserSlot = slot<Continuation<AuthResult, Task<Void>>>()
+        val successSlot = slot<OnCompleteListener<Void>>()
+        every { auth.createUserWithEmailAndPassword(any(), any())  } returns initialTask
+        every { auth.currentUser } returns currentUser
+        every { initialTask.continueWithTask(capture(createUserSlot)) } answers {
+            createUserSlot.captured.then(initialTask)
+            expected
+        }
+        every { currentUser.updateProfile(any()) } returns expected
+        every { expected.addOnCompleteListener(capture(successSlot)) } answers {
+            successSlot.captured.onComplete(expected)
+            expected
+        }
+
+        val callback = mockk<SignUpCallback> {
+            every { onSuccess() } just runs
+        }
+        providerInTest.signUpUser("Display Name", "valid@email.com", "P@ssw0rd!", callback)
+
+        verify { auth.createUserWithEmailAndPassword("valid@email.com", "P@ssw0rd!") }
+        verify { currentUser.updateProfile(request) }
+        verify { callback.onSuccess() }
     }
 
     @After
