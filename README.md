@@ -1,6 +1,16 @@
 # WeatherApp
-Weather App for technical examination
+This is a simple weather application with sign up and sign in feature. It uses a network based provider to fetch user's location that will be used to determine the weather in the user's current location.
 
+* Firebase Auth is used for Sign up and sign in feature.
+* Room and Sqlite for data persistence.
+* Location Manager to fetch current location.
+* Koin for managing dependencies.
+* Retrofit and Gson for API calls and Serialization
+* Mockk is used for mocking classes for unit test.
+* MVVM is the architecture used which also applies one-way data flow on the redux pattern.
+* LiveData and Flow is used to manage states and events.
+* OpenWeather API is used to determine the current weather.
+* Glide is used to fetch and cache images.
 
 ## How to set API KEY
 
